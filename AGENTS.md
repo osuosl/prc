@@ -103,6 +103,14 @@ grep -o '^Element\[[^]]*\]' control2.pcb   # refdes + footprint + value
 
 ## 4. Translations of the upstream Chinese documentation
 
+> **Fork divergence:** in this fork the in-repo Chinese has already been
+> translated in place — [README.md](README.md),
+> [control/control.ino](control/control.ino), [link.txt](link.txt) and the
+> `编号` column header in both BOMs are now English. Upstream is still Chinese,
+> so **expect conflicts on those files when rebasing on `upstream/master`**.
+> The translation is one isolated commit; `git log --oneline -- README.md
+> control/control.ino link.txt` finds it if it needs to be replayed or dropped.
+
 ### 4.1 [README.md](README.md)
 
 > **PC Remote Control Card**
