@@ -1,5 +1,35 @@
 # Contributing
 
+## Commit messages
+
+We use [Conventional Commits](https://www.conventionalcommits.org/), because
+[release-please](https://github.com/googleapis/release-please) derives the
+version bump and the changelog from them.
+
+```
+fix: correct the R5 value in both BOM exports
+
+Longer explanation of why, and what you measured.
+
+Refs: #1
+Signed-off-by: Your Name <you@example.org>
+```
+
+| Type | Use for | Bumps |
+|---|---|---|
+| `feat` | a design change — new part, new net, a re-export | minor |
+| `fix` | correcting something wrong in the design or its exports | patch |
+| `docs`, `build`, `ci`, `refactor`, `chore` | everything else | none |
+
+Most work here is `docs` or `fix`. Reserve `feat` for changes to the design
+itself, and use `!` or a `BREAKING CHANGE:` footer when a change would make an
+already-fabricated board incorrect — a changed pinout, a moved connector, a part
+that is no longer compatible with firmware in the field.
+
+**⚠ PRs are squash-merged, so the PR *title* becomes the commit on `main`.**
+That title is what release-please parses, so it has to be conventional too. CI
+checks it.
+
 ## Sign off every commit
 
 ```bash
@@ -9,6 +39,21 @@ git commit -s
 Every commit needs a `Signed-off-by:` trailer (the
 [DCO](https://developercertificate.org/)). `-s` generates it from your git
 identity; don't write the line by hand.
+
+## Releases
+
+Merging to `main` makes release-please open (or update) a release PR that bumps
+`version.txt` and `CHANGELOG.md`. Merging that PR tags `vX.Y.Z` and publishes a
+GitHub Release.
+
+**A release here is a snapshot of the design and its documentation, not a
+fabricated board revision.** Board revisions are `control.*`, `control1.*`,
+`control2.*` and the unpublished V1.1. Don't conflate the two: `v1.2.0` says
+nothing about which PCB is in the rack.
+
+Never hand-edit [CHANGELOG.md](CHANGELOG.md) or `version.txt`; release-please
+owns both. Release PRs are created with `GITHUB_TOKEN`, so CI does not run on
+them — that's a GitHub restriction, not a misconfiguration.
 
 ## ⚠ Check the base repo on every PR
 
@@ -73,7 +118,8 @@ for that part. Don't add entries to silence a finding you haven't investigated.
 | Check | Blocking | Notes |
 |---|---|---|
 | BOM / layout consistency | yes | except the baselined entries above |
-| Relative links in markdown resolve | yes | catches doc rot |
+| Relative links in markdown resolve | yes | cross-repo links must be absolute URLs |
+| Conventional PR title | yes | it becomes the squash commit release-please reads |
 
-Neither needs EDA tooling, so CI stays fast and can't break when `pcb-rnd`
+None of these need EDA tooling, so CI stays fast and can't break when `pcb-rnd`
 changes.
