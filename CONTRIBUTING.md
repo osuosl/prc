@@ -26,9 +26,10 @@ itself, and use `!` or a `BREAKING CHANGE:` footer when a change would make an
 already-fabricated board incorrect — a changed pinout, a moved connector, a part
 that is no longer compatible with firmware in the field.
 
-**⚠ PRs are squash-merged, so the PR *title* becomes the commit on `main`.**
-That title is what release-please parses, so it has to be conventional too. CI
-checks it.
+**⚠ We do not squash-merge.** Every commit you write lands on `main` intact and
+is parsed by release-please, so each one appears in the changelog on its own. CI
+checks every commit in a PR for a conventional subject and a `Signed-off-by`
+trailer.
 
 ## Sign off every commit
 
@@ -54,6 +55,17 @@ nothing about which PCB is in the rack.
 Never hand-edit [CHANGELOG.md](CHANGELOG.md) or `version.txt`; release-please
 owns both. Release PRs are created with `GITHUB_TOKEN`, so CI does not run on
 them — that's a GitHub restriction, not a misconfiguration.
+
+## Merging
+
+**Merge commit or rebase — never squash.** Squashing collapses a branch into one
+commit, which would reduce a PR's worth of distinct fixes to a single changelog
+line and lose the individual sign-offs. Squash merging is disabled on the
+repository for that reason.
+
+Keep the branch tidy before it merges, since nothing will tidy it afterwards:
+fold up "fix typo" commits with `git rebase -i`, and make sure each surviving
+commit is one logical change.
 
 ## ⚠ Check the base repo on every PR
 
@@ -119,7 +131,7 @@ for that part. Don't add entries to silence a finding you haven't investigated.
 |---|---|---|
 | BOM / layout consistency | yes | except the baselined entries above |
 | Relative links in markdown resolve | yes | cross-repo links must be absolute URLs |
-| Conventional PR title | yes | it becomes the squash commit release-please reads |
+| Conventional subject + sign-off, every commit | yes | commits land on `main` intact and drive the changelog |
 
 None of these need EDA tooling, so CI stays fast and can't break when `pcb-rnd`
 changes.
