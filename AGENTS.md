@@ -509,6 +509,13 @@ The firmware reference used to live here. It now lives with the code:
 Firmware bugs are in [../proc/AGENTS.md](../proc/AGENTS.md) §5. These are the
 problems that live in *this* repository:
 
+> **Tracked as GitHub issues** — <https://github.com/osuosl/prc/issues>.
+> H1 → [#1](https://github.com/osuosl/prc/issues/1) ·
+> H3 → [#2](https://github.com/osuosl/prc/issues/2) ·
+> H5 → [#3](https://github.com/osuosl/prc/issues/3).
+> H2 (C4) is folded into #1; H4 was fixed by the README rewrite.
+> `tools/check_bom.py` enforces H1 and H3 in CI.
+
 | # | Severity | Issue |
 |---|---|---|
 | H1 | **Check before respin** | **R5 disagrees between the BOM and the layout.** `27k` in [control_bom.csv](control_bom.csv), [control1_bom.csv](control1_bom.csv) and the rendered schematic; `72k` in the `Element[]` line of both [control.pcb](control.pcb) and [control2.pcb](control2.pcb). R5 is the MP1584 enable divider, so this moves the input under-voltage lockout between roughly 7.0 V and 3.6 V — i.e. whether the board starts at the 5 V the README claims. **Measure a real board.** |
