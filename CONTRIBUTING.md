@@ -125,6 +125,18 @@ discrepancy, so CI blocks on *new* drift without being permanently red.
 **When an entry is resolved, delete it** — that is what turns the check back on
 for that part. Don't add entries to silence a finding you haven't investigated.
 
+## Dependency updates
+
+Dependabot opens a **single grouped PR** for GitHub Actions, weekly on Monday —
+one PR for all actions rather than one per action.
+
+Its commits are prefixed `ci(deps):` so they satisfy the conventional-commit
+check, and bot authors are exempt from the sign-off requirement because
+Dependabot has no DCO option. They are not exempt from the format check.
+
+Nothing else here has a manifest Dependabot understands: `tools/check_bom.py` is
+pure standard library, by design, so CI has no dependencies to drift.
+
 ## What CI enforces
 
 | Check | Blocking | Notes |
