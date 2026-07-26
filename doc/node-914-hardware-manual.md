@@ -9,7 +9,7 @@
 > `bjlx.org.cn/system/files/images/`. Editorial notes added by the translator
 > are marked **[Note]** and are not part of the original.
 
-**Companion page:** [Software user manual](../../proc/doc/node-926-software-manual.md)
+**Companion page:** [Software user manual](https://github.com/osuosl/proc/blob/main/doc/node-926-software-manual.md)
 (original: https://bjlx.org.cn/node/926)
 
 ---
@@ -134,8 +134,8 @@ fi
 ```
 
 **[Note]** The linked `.hex` reports itself as `PROC-V1-20210201-4b34ae9`. That
-commit does not exist in the public [`prc`](../../prc) repository; the firmware
-source is in [`proc`](../../proc/AGENTS.md). Current upstream `proc` HEAD builds
+commit does not exist in the public [`prc`](https://github.com/osuosl/prc) repository; the firmware
+source is in [`proc`](https://github.com/osuosl/proc/blob/main/AGENTS.md). Current upstream `proc` HEAD builds
 as `PROC-V1-20241103-a8f458f`, so this attachment is roughly four years behind.
 
 ## Linked image pages

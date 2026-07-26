@@ -28,31 +28,36 @@ was seeded from this very file on 2020-01-02 (the two files still differ by only
   [control/control.ino](control/control.ino).
 
 > **If the task is "improve the software", the work belongs in
-> [../proc](../proc/AGENTS.md), not here.**
+> [osuosl/proc](https://github.com/osuosl/proc/blob/main/AGENTS.md), not here.**
 
 **This file is the hardware reference.** Firmware build, EEPROM layout, menu,
-scripting and the bug list live in [../proc/AGENTS.md](../proc/AGENTS.md).
+scripting and the bug list live in [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md).
 
 ---
 
 ## 2. Where this sits in the workspace
 
-Full map: [../AGENTS.md](../AGENTS.md). The short version:
+Related repositories:
 
 | Directory | Relevance to this repo |
 |---|---|
-| [../proc](../proc/AGENTS.md) | **The firmware that runs on this hardware.** Seeded from `control/control.ino` on 2020-01-02 |
-| [../procV2](../procV2/AGENTS.md) | The ESP8266 successor. Different board, different firmware |
-| [../jlc_gEDA_pcb](../jlc_gEDA_pcb/AGENTS.md) | Footprint library the author used for some parts of this board |
-| [../pcb](../pcb/AGENTS.md), [../geda-pcb](../geda-pcb/AGENTS.md) | Forks of the layout tool that reads `control*.pcb`. Debian's `pcb-rnd` also works |
-| [../ATmega328PB](../ATmega328PB/AGENTS.md) | Arduino core for the MCU on this board. **Not** used by production builds |
+| [osuosl/proc](https://github.com/osuosl/proc/blob/main/AGENTS.md) | **The firmware that runs on this hardware.** Seeded from `control/control.ino` on 2020-01-02 |
+| [lshw/procV2](https://github.com/lshw/procV2) | The ESP8266 successor. Different board, different firmware |
+| [lshw/jlc_gEDA_pcb](https://github.com/lshw/jlc_gEDA_pcb) | Footprint library the author used for some parts of this board |
+| [lshw/pcb](https://github.com/lshw/pcb), [lshw/geda-pcb](https://github.com/lshw/geda-pcb) | Forks of the layout tool that reads `control*.pcb`. Debian's `pcb-rnd` also works |
+| [lshw/ATmega328PB](https://github.com/lshw/ATmega328PB) | Arduino core for the MCU on this board. **Not** used by production builds |
 
 Author: **Liu Shiwei (刘世伟)** `<liushiwei@gmail.com>`, Beijing Loongson &
 Debian User Club (北京龙芯＆debian用户俱乐部, https://bjlx.org.cn/).
 
 Existing third-party forks of this repo: `winthundr/loongsonprc`, `WSYUTeam/prc`
-— both stale (2019–2020) and contain nothing useful. Fork planning for OSU OSL
-is in [../AGENTS.md](../AGENTS.md) §7.
+— both stale (2019–2020) and contain nothing useful.
+
+Of the author's other repositories, only `prc` and `proc` were forked to OSL.
+`procV2` has no LICENSE file (all rights reserved), and the `pcb`, `geda-pcb`,
+`optiboot` and `ATmega328PB` forks each carry only one to nine commits of his
+own work — take those from their real upstreams instead. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the sync policy.
 
 ---
 
@@ -213,7 +218,7 @@ Attachments on that page:
 ### 4.4 Software manual — https://bjlx.org.cn/node/926 (2020-04-26)
 
 *Abridged. Full translation, annotated with every point where it no longer
-matches the firmware: [../proc/doc/node-926-software-manual.md](../proc/doc/node-926-software-manual.md).*
+matches the firmware: [proc: vendor software manual](https://github.com/osuosl/proc/blob/main/doc/node-926-software-manual.md).*
 
 > **PROC software instructions**
 >
@@ -489,24 +494,24 @@ So the on-board DS18B20 (D3) is what makes each unit unique. Consequences:
 
 ---
 
-## 7. Firmware — see [../proc/AGENTS.md](../proc/AGENTS.md)
+## 7. Firmware — see [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md)
 
 The firmware reference used to live here. It now lives with the code:
 
 | Topic | Where |
 |---|---|
-| Building (`arduino-cli`, FQBN, libraries, flash budget) | [../proc/AGENTS.md](../proc/AGENTS.md) §3 |
-| Bootloader and fuses (why the crystal is unpopulated) | [../proc/AGENTS.md](../proc/AGENTS.md) §3 |
-| Flashing with `avrdude` (and the CONN3 "Update" jumper) | [../proc/AGENTS.md](../proc/AGENTS.md) §3 and §6.4 below |
-| EEPROM layout, factory defaults | [../proc/AGENTS.md](../proc/AGENTS.md) §4.2 |
-| Device identity from the DS18B20 | §6.6 below, and [../proc/AGENTS.md](../proc/AGENTS.md) §4.3 |
-| RC-oscillator calibration | [../proc/AGENTS.md](../proc/AGENTS.md) §4.4 |
-| Menu, banner, escape sequences, script language | [../proc/AGENTS.md](../proc/AGENTS.md) §4.5–4.7 |
-| **Verified bug list and improvement targets** | [../proc/AGENTS.md](../proc/AGENTS.md) §5 |
+| Building (`arduino-cli`, FQBN, libraries, flash budget) | [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md) §3 |
+| Bootloader and fuses (why the crystal is unpopulated) | [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md) §3 |
+| Flashing with `avrdude` (and the CONN3 "Update" jumper) | [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md) §3 and §6.4 below |
+| EEPROM layout, factory defaults | [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md) §4.2 |
+| Device identity from the DS18B20 | §6.6 below, and [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md) §4.3 |
+| RC-oscillator calibration | [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md) §4.4 |
+| Menu, banner, escape sequences, script language | [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md) §4.5–4.7 |
+| **Verified bug list and improvement targets** | [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md) §5 |
 
 ## 8. Hardware-side issues found while reading these files
 
-Firmware bugs are in [../proc/AGENTS.md](../proc/AGENTS.md) §5. These are the
+Firmware bugs are in [osuosl/proc AGENTS.md](https://github.com/osuosl/proc/blob/main/AGENTS.md) §5. These are the
 problems that live in *this* repository:
 
 > **Tracked as GitHub issues** — <https://github.com/osuosl/prc/issues>.
@@ -575,7 +580,7 @@ Terms you will hit constantly in commits, comments and the vendor pages.
   courtesy.
 - **Do not edit [control/control.ino](control/control.ino).** It is a dead
   prototype kept for history. Firmware changes go in
-  [../proc](../proc/AGENTS.md), which has its own conventions.
+  [osuosl/proc](https://github.com/osuosl/proc/blob/main/AGENTS.md), which has its own conventions.
 - **The pin assignments are a hardware contract.** `_24V_OUT`=D3, `NET_RESET`=D4,
   W5500 SPI on D10–D13, `DS`=A3, `PC_RESET`=A4, `PC_POWER`=A5 (§6.2). Changing
   them here means changing the firmware too, and vice versa.
@@ -589,10 +594,10 @@ and §4.4 above are kept for reading in context; the files below are complete.
 | Source | Original title | Translation |
 |---|---|---|
 | https://bjlx.org.cn/node/914 | PROC-V1 远程控制器硬件用户手册 | [doc/node-914-hardware-manual.md](doc/node-914-hardware-manual.md) |
-| https://bjlx.org.cn/node/926 | proc软件使用说明 | [../proc/doc/node-926-software-manual.md](../proc/doc/node-926-software-manual.md) |
+| https://bjlx.org.cn/node/926 | proc软件使用说明 | [proc: vendor software manual](https://github.com/osuosl/proc/blob/main/doc/node-926-software-manual.md) |
 | https://bjlx.org.cn/node/953 | 主板上的串口杜邦座 | [doc/node-953-motherboard-com-header.md](doc/node-953-motherboard-com-header.md) |
 | https://bjlx.org.cn/node/954 | procv1.1 hardware | [doc/node-954-procv1.1-hardware.md](doc/node-954-procv1.1-hardware.md) |
-| https://bjlx.org.cn/node/929 | PROC-V2 用户手册 | [../procV2/doc/node-929-v2-user-manual.md](../procV2/doc/node-929-v2-user-manual.md) |
+| https://bjlx.org.cn/node/929 | PROC-V2 用户手册 | [PROC-V2 manual](https://bjlx.org.cn/node/929) |
 
 Downloadable artefacts on those pages (not mirrored — they are binaries):
 
