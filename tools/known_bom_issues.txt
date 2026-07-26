@@ -1,0 +1,9 @@
+# Findings that tools/check_bom.py should report but not fail on, because they
+# are already tracked. Each entry is matched as a substring of the finding text.
+# Delete the entry when the underlying issue is closed, so CI starts enforcing it.
+#
+# R5, the MP1584 enable divider, is 27k in every exported assembly file and in
+# the rendered schematic, but 72k in all three layouts. That moves the input
+# under-voltage lockout between roughly 7.0 V and 3.6 V. Which one is on the
+# physical boards has to be measured before it can be resolved.
+R5: value differs
