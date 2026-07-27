@@ -10,13 +10,13 @@
 #include <SPI.h>
 #include <Ethernet2.h>
 
-//eeprom 内存分配
+//eeprom memory layout
 enum
 {
   MAC0, //0
   MAC1, //1
-  MAC2,   //2,序列号存放地址
-  MAC3, //3,版本
+  MAC2,   //2, address where the serial number is stored
+  MAC3, //3, version
   MAC4, //4
   MAC5, //5
   IP0,
@@ -33,7 +33,7 @@ enum
   COMSET_L
 };
 
-//设置
+//settings
 struct setting {
   int mac[6];
   char ip[4];
@@ -53,7 +53,7 @@ EthernetServer server(23);
 
 void setup() {
   pinMode(_24V_OUT, OUTPUT);
-  digitalWrite(_24V_OUT, HIGH); //默认24V开启输出
+  digitalWrite(_24V_OUT, HIGH); //24V output enabled by default
   pinMode(PC_RESET, OUTPUT);
   digitalWrite(PC_RESET, LOW);
   pinMode(PC_POWER, OUTPUT);
@@ -74,7 +74,7 @@ void setup() {
   setup_watchdog(WDTO_30MS);
   if (debug)
     displaybz();
-  OSCCAL = 147; //校准rc震荡器
+  OSCCAL = 147; //calibrate the rc oscillator
 }
 boolean alreadyConnected = false;
 EthernetClient client;
@@ -91,14 +91,14 @@ void loop() {
     client = server.available();
     if (!client) return;
     alreadyConnected = true;
-    blank_time = millis() + 100; //10毫秒内收到的乱码，忽略
+    blank_time = millis() + 100; //ignore the garbage received within the first 10 milliseconds
     if (debug)
       Serial.println(F("\r\n#new client in"));
   }
 
-  while (client.available() > 0) { //tcp有数据进来
+  while (client.available() > 0) { //data arriving from tcp
     ch = client.read();
-    if (blank_time > millis()) continue; //开始10ms收到的内容会被忽略
+    if (blank_time > millis()) continue; //anything received in the first 10ms is ignored
     if (debug) {
       Serial.write(' ');
       Serial.write('[');
@@ -114,14 +114,14 @@ void loop() {
   }
 }
 
-//看门狗中断做定时任务 30ms 1次
+//the watchdog interrupt runs the periodic tasks, once every 30ms
 uint16_t volatile sec = 0, ms = 0;
-uint16_t volatile dogcount = 0; //超时重启，主程序循环清零，不清零的话100秒重启系统
-int16_t volatile pc_reset_on = 0; //按下pc_reset键的ms时长
-int16_t volatile pc_power_on = 0; //按下pc_power键的ms时长
+uint16_t volatile dogcount = 0; //watchdog counter, cleared by the main loop. If it is never cleared the system reboots after 100 seconds
+int16_t volatile pc_reset_on = 0; //how many ms the pc_reset key stays pressed
+int16_t volatile pc_power_on = 0; //how many ms the pc_power key stays pressed
 ISR(WDT_vect) {
   dogcount++;  //30ms
-  if (dogcount > 100000 / 30) asm volatile ("  jmp 0"); //100秒看门狗超时重启
+  if (dogcount > 100000 / 30) asm volatile ("  jmp 0"); //100 second watchdog timeout: reboot
   ms += 30;
   if (ms > 1000) {
     ms -= 1000;
@@ -130,28 +130,28 @@ ISR(WDT_vect) {
       if (sec % 10 == 0)
         Serial.println(sec);
   }
-  //处理reset键，其它程序只要修改 pc_reset_on=300，就可以按下300ms
+  //handle the reset key: other code only has to set pc_reset_on=300 to press it for 300ms
   if (pc_reset_on > 0) pc_reset_on -= 30; //30ms
-  if (pc_reset_on > 0) { //reset开关按下
+  if (pc_reset_on > 0) { //reset switch pressed
     if (digitalRead(PC_RESET) != HIGH)
       digitalWrite(PC_RESET, HIGH);
-  } else { //reset开关松开
+  } else { //reset switch released
     if (digitalRead(PC_RESET) != LOW)
       digitalWrite(PC_RESET, LOW);
   }
 
-  //处理reset键，其它程序只要修改 pc_power_on=300，就可以按下300ms
+  //handle the power key: other code only has to set pc_power_on=300 to press it for 300ms
   if (pc_power_on > 0) pc_power_on -= 30; //30ms
-  if (pc_power_on > 0) { //power开关按下
+  if (pc_power_on > 0) { //power switch pressed
     if (digitalRead(PC_POWER) != HIGH)
       digitalWrite(PC_POWER, HIGH);
-  } else { //power开关松开
+  } else { //power switch released
     if (digitalRead(PC_POWER) != LOW)
       digitalWrite(PC_POWER, LOW);
   }
 }
 
-//设置看门狗定时中断时间ii=WDTO_15MS .... WDTO_8S
+//set the watchdog interrupt interval; ii=WDTO_15MS .... WDTO_8S
 void setup_watchdog(int ii) {
   byte bb;
   if (ii > 9 ) ii = 9;
@@ -166,7 +166,7 @@ void setup_watchdog(int ii) {
   WDTCSR |= _BV(WDIE);
 }
 
-//校准rc振荡器
+//calibrate the rc oscillator
 inline void displaybz() {
   uint8_t osc;
   delay(10);

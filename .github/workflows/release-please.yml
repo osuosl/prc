@@ -1,0 +1,31 @@
+name: release-please
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v5.0.0
+        id: release
+        with:
+          # Falls back to GITHUB_TOKEN when the secret is not set, so this
+          # workflow works either way. But a PR created with GITHUB_TOKEN does
+          # not trigger workflows, so its required checks never report and it
+          # shows as blocked by branch protection -- mergeable only by an admin.
+          # Setting RELEASE_PLEASE_TOKEN (see CONTRIBUTING.md) makes release PRs
+          # run CI like any other and removes the need for that bypass.
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+    outputs:
+      released: ${{ steps.release.outputs.release_created }}
+      tag: ${{ steps.release.outputs.tag_name }}

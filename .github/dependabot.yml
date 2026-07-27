@@ -1,0 +1,45 @@
+version: 2
+
+# Only github-actions applies here. There is no Dependabot ecosystem for
+# arduino-cli, so the core and library pins in .github/workflows/*.yml
+# (PLATFORM_VERSION, ONEWIRE_VERSION, ETHERNET3_VERSION) are NOT tracked below
+# and have to be reviewed by hand. That is deliberate rather than an oversight:
+# this firmware sits at ~95% of flash, so a toolchain bump can push it over the
+# ceiling and wants a human looking at the size delta.
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: America/Los_Angeles
+
+    # One PR for everything, rather than one per action.
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+          - major
+
+    # Produces "chore(deps): bump the github-actions group with 3 updates".
+    #
+    # "chore" is deliberate, not cosmetic. Under release-please's default
+    # versioning strategy only feat, fix and breaking changes bump a version, so
+    # a chore commit cannot cause a release on its own -- merging a Dependabot PR
+    # will not mint a new firmware version. "chore" is also hidden in
+    # changelog-sections, so action bumps stay out of release notes that are read
+    # by people deciding whether to reflash a board.
+    #
+    # It also has to be *some* conventional prefix: without one, every Dependabot
+    # PR would fail the check in .github/workflows/commits.yml.
+    commit-message:
+      prefix: chore
+      include: scope
+
+    labels:
+      - dependencies
+    open-pull-requests-limit: 3

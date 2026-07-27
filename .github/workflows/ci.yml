@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main, osl-docs]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  bom:
+    name: BOM / layout consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Pure stdlib -- deliberately needs no EDA tooling, so it stays fast and
+      # cannot break when pcb-rnd or lepton-eda change.
+      - name: Check assembly files against the layouts
+        run: python3 tools/check_bom.py --allow-known
+
+  links:
+    name: docs links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check relative links in markdown resolve
+        run: |
+          python3 - <<'PY'
+          import pathlib, re, sys
+          root = pathlib.Path('.')
+          bad = 0
+          for md in sorted(root.rglob('*.md')):
+              if '.git' in md.parts:
+                  continue
+              for m in re.finditer(r'\[([^\]]*)\]\(([^)\s]+)\)', md.read_text(encoding='utf-8')):
+                  target = m.group(2)
+                  if target.startswith(('http://', 'https://', '#', 'mailto:')):
+                      continue
+                  if not (md.parent / target.split('#')[0]).exists():
+                      print(f"BROKEN  {md}: [{m.group(1)}]({target})")
+                      bad += 1
+          print(f"\n{bad} broken relative link(s)")
+          sys.exit(1 if bad else 0)
+          PY
