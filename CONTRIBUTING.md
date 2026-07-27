@@ -82,18 +82,49 @@ runs, its required checks never report, and it shows as blocked.
 Admin enforcement is deliberately off so a repo admin can merge it anyway. That
 is a workaround, not a fix.
 
-The proper fix is to give release-please a token that isn't `GITHUB_TOKEN` — a
-fine-grained PAT or a GitHub App installation token — stored as a secret and
-passed to the action:
+The workflow already reads `secrets.RELEASE_PLEASE_TOKEN` and falls back to
+`GITHUB_TOKEN` when it is unset, so setting the secret is all that is needed.
 
-```yaml
-- uses: googleapis/release-please-action@v5.0.0
-  with:
-    token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+**Creating the token** (needs org owner/admin):
+
+1. <https://github.com/settings/personal-access-tokens/new> — a *fine-grained*
+   PAT.
+2. Resource owner: **osuosl**. Repository access: **only** `osuosl/proc` and
+   `osuosl/prc`.
+3. Repository permissions — exactly two:
+   - **Contents: Read and write** (branches, commits, tags, releases)
+   - **Pull requests: Read and write** (open and update the release PR)
+4. Expiry: pick a date and put a calendar reminder on it. An expired token
+   fails silently — release PRs simply stop appearing.
+5. If the org requires approval for fine-grained PATs, approve it at
+   *Organization settings → Personal access tokens → Pending requests*.
+
+**Storing it** — set it once at the org so both repos share it:
+
+```bash
+gh secret set RELEASE_PLEASE_TOKEN --org osuosl --repos proc,prc
+# paste the token at the prompt; it is read from stdin and never hits your shell history
 ```
 
-Then its PRs trigger CI like any other and admin bypass is no longer needed.
-Worth doing once someone with org permissions can mint the token.
+Per-repo instead, if you prefer:
+
+```bash
+gh secret set RELEASE_PLEASE_TOKEN --repo osuosl/proc
+gh secret set RELEASE_PLEASE_TOKEN --repo osuosl/prc
+```
+
+**After it works** — confirm a release PR shows CI runs, then close the loop by
+turning admin enforcement back on, which is the whole point of the exercise:
+
+```bash
+gh api -X PATCH repos/osuosl/proc/branches/main/protection/enforce_admins
+gh api -X PATCH repos/osuosl/prc/branches/main/protection/enforce_admins
+```
+
+**A note on authorship.** A user PAT makes release PRs appear authored by that
+user, and they will not be able to approve their own PR if approvals are ever
+required. A GitHub App installation token or a dedicated machine account avoids
+both, at the cost of more setup. For two low-traffic repos a PAT is proportionate.
 
 ## Merging
 
