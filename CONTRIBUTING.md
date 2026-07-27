@@ -130,9 +130,12 @@ for that part. Don't add entries to silence a finding you haven't investigated.
 Dependabot opens a **single grouped PR** for GitHub Actions, weekly on Monday —
 one PR for all actions rather than one per action.
 
-Its commits are prefixed `ci(deps):` so they satisfy the conventional-commit
-check, and bot authors are exempt from the sign-off requirement because
-Dependabot has no DCO option. They are not exempt from the format check.
+Its commits are prefixed **`chore(deps):`**, so they never trigger a release
+(only `feat`, `fix` and breaking changes bump a version) and stay out of the
+changelog, while still satisfying the conventional-commit check.
+
+Bot authors are exempt from the sign-off requirement, because Dependabot has no
+DCO option. They are not exempt from the format check.
 
 Nothing else here has a manifest Dependabot understands: `tools/check_bom.py` is
 pure standard library, by design, so CI has no dependencies to drift.

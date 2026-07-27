@@ -25,11 +25,19 @@ updates:
           - patch
           - major
 
-    # Produces "ci(deps): bump the github-actions group with 3 updates", which
-    # satisfies the conventional-commit check in .github/workflows/commits.yml.
-    # Without this prefix every Dependabot PR would fail that check.
+    # Produces "chore(deps): bump the github-actions group with 3 updates".
+    #
+    # "chore" is deliberate, not cosmetic. Under release-please's default
+    # versioning strategy only feat, fix and breaking changes bump a version, so
+    # a chore commit cannot cause a release on its own -- merging a Dependabot PR
+    # will not mint a new firmware version. "chore" is also hidden in
+    # changelog-sections, so action bumps stay out of release notes that are read
+    # by people deciding whether to reflash a board.
+    #
+    # It also has to be *some* conventional prefix: without one, every Dependabot
+    # PR would fail the check in .github/workflows/commits.yml.
     commit-message:
-      prefix: ci
+      prefix: chore
       include: scope
 
     labels:

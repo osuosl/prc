@@ -34,9 +34,10 @@ jobs:
               capture_output=True, text=True, check=True,
           ).stdout.split()
 
-          # Bots cannot sign off: Dependabot has no DCO option. Its commits still
-          # have to be conventional, because they land on main and appear in the
-          # changelog like any other.
+          # Bots cannot sign off: Dependabot has no DCO option. Their commits still
+          # have to be conventional -- Dependabot uses chore(deps), which keeps it
+          # out of the changelog and stops it triggering a release, but it still
+          # has to parse.
           BOTS = ("dependabot[bot]", "github-actions[bot]", "release-please[bot]")
 
           bad = []
