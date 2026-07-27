@@ -54,7 +54,46 @@ nothing about which PCB is in the rack.
 
 Never hand-edit [CHANGELOG.md](CHANGELOG.md) or `version.txt`; release-please
 owns both. Release PRs are created with `GITHUB_TOKEN`, so CI does not run on
-them — that's a GitHub restriction, not a misconfiguration.
+them and they show as blocked by branch protection — see
+[Branch protection](#branch-protection).
+
+## Branch protection
+
+`main` is protected:
+
+| Rule | Setting |
+|---|---|
+| Changes must go through a PR | yes, **0 approvals required** |
+| Required status checks | all of them (see below) |
+| Force pushes / deletions | blocked |
+| Conversation resolution | required |
+| Linear history | **not** required — merge commits are the workflow |
+| Admin enforcement | **off** — see the release caveat below |
+
+Approvals are not required so a solo maintainer can still land a fix. Review
+anyway when there is someone to review.
+
+### ⚠ The release PR will look blocked
+
+release-please's PR is created with `GITHUB_TOKEN`, and by GitHub's design a
+token-created PR **does not trigger workflows**. So the release PR gets no CI
+runs, its required checks never report, and it shows as blocked.
+
+Admin enforcement is deliberately off so a repo admin can merge it anyway. That
+is a workaround, not a fix.
+
+The proper fix is to give release-please a token that isn't `GITHUB_TOKEN` — a
+fine-grained PAT or a GitHub App installation token — stored as a secret and
+passed to the action:
+
+```yaml
+- uses: googleapis/release-please-action@v5.0.0
+  with:
+    token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+```
+
+Then its PRs trigger CI like any other and admin bypass is no longer needed.
+Worth doing once someone with org permissions can mint the token.
 
 ## Merging
 
